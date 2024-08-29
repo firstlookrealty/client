@@ -1,5 +1,5 @@
 ﻿Flask
 Flask-Cors
 gunicorn
-request
+requests
 json
