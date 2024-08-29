@@ -47,11 +47,31 @@ def process_lead(lead_data):
         logger.error(f"Error processing lead: {str(e)}")
         return jsonify({'error': 'An unexpected error occurred'}), 500
 
+
+import requests
+import json
 @app.route('/lead_api', methods=['POST'])
 @require_api_secret
 def receive_lead():
     lead_data = parse_payload(request.get_data().decode('utf-8'))
-    return process_lead(lead_data)
+    # Replace with your Zapier Webhook URL
+    ZAPIER_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/19393515/2t39riy/'
+
+    # # Data to send
+    # data = {
+    #     "name": "John Doe",
+    #     "email": "john.doe@example.com"
+    # }
+
+    # Send data to Zapier
+    response = requests.post(ZAPIER_WEBHOOK_URL, json=lead_data)
+
+    # Print response
+    if response.status_code == 200:
+        print("Success!")
+    else:
+        print(f"Error: {response.status_code} - {response.text}")
+        return process_lead(lead_data)
 
 @app.route('/test_lead_api', methods=['POST'])
 def test_receive_lead():
